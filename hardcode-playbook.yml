@@ -1,0 +1,36 @@
+---
+- name: Process Control
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Create sshd-control.log File
+      file:
+        path: /home/ubuntu/ansible-jenkins/sshd-cont.log
+        mode: 0777
+        state: touch
+
+    - name: sshd Process Control
+      shell: ps aux | pgrep [s]shd
+      register: sshd_process
+      ignore_errors: true
+
+    - name: Start sshd Process
+      shell: systemctl start sshd
+      when: sshd_process.rc != 0
+      notify: log_sshd_started
+
+    - name: sshd Already Running
+      ansible.builtin.shell:
+        cmd: echo "{{ ansible_date_time.iso8601_micro }} - sshd is running" >> /home/ubuntu/ansible-jenkins/sshd-cont.log
+      when: sshd_process.rc == 0
+
+  handlers:
+    - name: log_sshd_started
+      lineinfile:
+        path: /home/ubuntu/ansible-jenkins/sshd-cont.log
+        line: "{{ ansible_date_time.iso8601_micro }} - sshd is started"
+        insertafter: EOF
+
+    
+    

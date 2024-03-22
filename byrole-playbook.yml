@@ -1,0 +1,8 @@
+---
+- name: Process Control
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - process-control
+    

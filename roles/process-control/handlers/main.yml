@@ -1,0 +1,5 @@
+- name: log_sshd_started
+  lineinfile:
+    path: /home/ubuntu/sshd-cont.log
+    line: "{{ ansible_date_time.iso8601_micro }} - sshd is started." 
+    insertafter: EOF

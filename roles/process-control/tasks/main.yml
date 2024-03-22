@@ -1,0 +1,21 @@
+---
+- name: Create sshd-control File
+  file:
+    path: "{{ logFilePath }}"
+    mode: 0777
+    state: touch
+
+- name: Process State Control
+  shell: ps aux | pgrep "{{ processName }}"
+  register: sshd_process
+  ignore_errors: true
+
+- name: Start "{{ processName }}" Process
+  shell: systemctl start "{{ processName }}"
+  when: sshd_process.rc != 0
+  notify: log_sshd_started
+
+- name: Process Already Running
+  ansible.builtin.shell:
+    cmd: echo "{{ ansible_date_time.iso8601_micro }} - {{ processName }} is running" >> "{{ logFilePath }}"
+  when: sshd_process.rc == 0

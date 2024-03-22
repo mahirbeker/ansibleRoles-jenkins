@@ -1,0 +1,3 @@
+---
+processName: sshd
+logFilePath: /home/ubuntu/ansible-jenkins/process-control.log
