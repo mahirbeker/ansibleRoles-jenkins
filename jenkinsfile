@@ -2,11 +2,7 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/mahirbeker/ansibleRoles-jenkins.git'
-            }
-        }
+       
         stage('Run Ansible Playbook') {
             steps {
                 sh 'ansible-playbook -i inventory byrole-playbook.yml'
