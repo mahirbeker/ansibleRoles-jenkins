@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Run Ansible Playbook') {
             steps {
-                sh 'ansible-playbook byrole-playbook.yml'
+                sh 'ansible-playbook -i inventory byrole-playbook.yml'
             }
         }
     }
